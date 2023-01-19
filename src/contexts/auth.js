@@ -118,8 +118,26 @@ export function AuthProvider({ children }) {
         })
     }
 
+    async function editUser({ email, username, birthDate, phone_number, adress, navigation }) {
+        await api.patch('user', {
+            adress, username, birthDate, email, phone_number
+        }).then(r => {
+            r.data; showMessage({
+                type: "success",
+                message: "Profile edited successfully",
+                duration: 2000
+            }); navigation.navigate('ProfileScreen')
+        }).catch(err => {
+            console.log(err); showMessage({
+                type: "danger",
+                message: "Something failed trying to edit the profile",
+                duration: 2000
+            })
+        })
+    }
+
     return (
-        <AuthContext.Provider value={{ user, signIn, logout, setUser, register, verify, pass, recover }}>
+        <AuthContext.Provider value={{ user, signIn, logout, setUser, register, verify, pass, recover, editUser }}>
             {children}
         </AuthContext.Provider>
     )

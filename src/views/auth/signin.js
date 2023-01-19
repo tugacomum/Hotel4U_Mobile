@@ -61,7 +61,8 @@ export default function signin() {
       <View style={{ alignSelf: 'center', marginHorizontal: 40 }}>
         <Text style={{ fontSize: 25, fontWeight: 'bold', textAlign: 'center' }}>Welcome back!</Text>
         <Text style={{ textAlign: 'center', color: COLORS.grey, marginTop: 10 }}>Log in to your existant account of <Text style={{ color: COLORS.primary }}>Hotel4U</Text></Text>
-      </View><View style={{ paddingRight: 40, paddingLeft: 40 }}>
+      </View>
+      <View style={{ paddingRight: 40, paddingLeft: 40 }}>
         <View style={{ marginTop: 10 }}>
           <Image source={require('../../assets/user3.png')} style={{ top: 44, tintColor: COLORS.dark, width: 27, height: 27 }} />
           <Item floatingLabel style={{ borderColor: '#A1A1A1', width: Dimensions.get('window').width / 1.6, alignSelf: 'center', left: 5 }}>

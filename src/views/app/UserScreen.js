@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
     caption: {
-      fontSize: 14,
+      fontSize: 12,
       lineHeight: 14,
       fontWeight: '500',
     },

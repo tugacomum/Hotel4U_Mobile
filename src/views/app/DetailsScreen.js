@@ -12,10 +12,6 @@ import { Appearance } from 'react-native';
 
 const DetailsScreen = ({navigation, route}) => {
   const item = route.params.hotel;
-  const [fav, setFav] = useState(false);
-  const handleClick = () => {
-    setFav(!fav);
-  };
   const [color, setColor] = useState('light');
     useEffect(() => {
       console.log(item)
@@ -34,7 +30,7 @@ const DetailsScreen = ({navigation, route}) => {
       </ImageBackground>
       <View>
         <View style={style.iconContainer}>
-          <Icon name="place" color={COLORS.white} size={28} />
+          <Icon onPress={()=>{}} name="place" color={COLORS.white} size={28} />
         </View>
         <View style={{marginTop: 20, paddingHorizontal: 20}}>
           <Text style={{fontSize: 20, fontWeight: 'bold', color: color === 'dark' ? COLORS.white : COLORS.dark}}>{item.name}</Text>
