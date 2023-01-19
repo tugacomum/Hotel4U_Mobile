@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import COLORS from '../../consts/colors';
@@ -29,9 +30,9 @@ const DetailsScreen = ({navigation, route}) => {
         
       </ImageBackground>
       <View>
-        <View style={style.iconContainer}>
-          <Icon onPress={()=>{}} name="place" color={COLORS.white} size={28} />
-        </View>
+        <TouchableOpacity style={style.iconContainer} onPress={()=> navigation.navigate("MapsScreen")}>
+          <Icon name="place" color={COLORS.white} size={28} />
+        </TouchableOpacity>
         <View style={{marginTop: 20, paddingHorizontal: 20}}>
           <Text style={{fontSize: 20, fontWeight: 'bold', color: color === 'dark' ? COLORS.white : COLORS.dark}}>{item.name}</Text>
           <Text

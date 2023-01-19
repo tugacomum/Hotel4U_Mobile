@@ -48,8 +48,7 @@ export default function User() {
     } else {
 
         return (
-            <SafeAreaView style={styles.container}>
-
+            <SafeAreaView style={[styles.container , {backgroundColor: color === 'dark' ? COLORS.darkgrey : COLORS.white}]}>
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Avatar.Image 
@@ -70,21 +69,21 @@ export default function User() {
       <View style={styles.userInfoSection}>
         <View style={styles.row}>
           <Icon name="map-marker-radius" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>{user.adress}</Text>
+          <Text style={{color: color === 'dark' ? COLORS.white : "#777777", marginLeft: 20}}>{user.adress}</Text>
         </View>
         <View style={styles.row}>
           <Icon name="phone" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>{user.phone_number}</Text>
+          <Text style={{color: color === 'dark' ? COLORS.white : "#777777", marginLeft: 20}}>{user.phone_number}</Text>
         </View>
         <View style={styles.row}>
           <Icon name="email" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>{user.email}</Text>
+          <Text style={{color: color === 'dark' ? COLORS.white : "#777777", marginLeft: 20}}>{user.email}</Text>
         </View>
       </View>
       <View style={styles.infoBoxWrapper}>
           <View style={styles.infoBox}>
-            <Title>12</Title>
-            <Caption>Orders</Caption>
+            <Title style={color === 'dark' ? COLORS.white : COLORS.dark}>12</Title>
+            <Caption style={color === 'dark' ? COLORS.white : COLORS.dark}>Orders</Caption>
           </View>
       </View>
       <View style={styles.menuWrapper}>

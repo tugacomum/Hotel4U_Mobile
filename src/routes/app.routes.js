@@ -10,6 +10,7 @@ import Details from '../views/app/DetailsScreen';
 import User from '../views/app/UserScreen';
 import Favourite from '../views/app/FavouriteScreen'
 import EditUser from '../views/app/EditUserScreen'
+import MapsScreen from '../views/app/MapsScreen';
 import COLORS from '../consts/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -66,6 +67,15 @@ const HomeStackScreen = ({ navigation }) => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+      <HomeStack.Screen name="MapsScreen" component={MapsScreen} options={{headerTitle: () => (
+        <View>
+          <View>
+            <Text style={{ fontSize: 25, fontWeight: 'bold', color: COLORS.primary }}>
+              Maps
+            </Text>
+          </View>
+        </View>
+      )}}/>
       <HomeStack.Screen name="HotelsScreen" options={{headerTitle: () => (
         <View>
           <View>

@@ -33,12 +33,12 @@ const HomeScreen = ({ navigation }) => {
       Appearance.addChangeListener(({colorScheme}) =>{setColor(colorScheme)});
   })
 
-  const CategoryList = () => {
+  const CategoryList = ({ index }) => {
     return (
-      <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{alignSelf: 'center'}}>
+      <ScrollView key={index} showsHorizontalScrollIndicator={false} horizontal={true} style={{alignSelf: 'center'}}>
         
         {categories.map((item, index) => (
-        <View style={style.categoryListContainer}>
+        <View key={index} style={style.categoryListContainer}>
           <TouchableOpacity
             key={index}
             activeOpacity={0.8}
@@ -221,7 +221,7 @@ const HomeScreen = ({ navigation }) => {
               style={{ fontSize: 20, paddingLeft: 10 }}
             />
           </View>
-          <CategoryList />
+          <CategoryList key={(index) => index} />
           <View>
             <Animated.FlatList
               onMomentumScrollEnd={(e) => {

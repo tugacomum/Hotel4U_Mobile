@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Appearance } from 'react-native'
 import { tabHome, tabFavourites, tabProfile } from '../assets'
+import { Platform, Keyboard } from 'react-native'
 
 import { Sizing } from '../helper/sizing'
 import COLORS from '../consts/colors'
@@ -26,43 +27,102 @@ const TAB_BAR_ITEMS = [
 
 export default function MyTabBar({ navigation }) {
     const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
+    const [visible, setVisible] = useState(true);
     const [color, setColor] = useState('light');
-  useEffect(() =>{
-      Appearance.addChangeListener(({colorScheme}) =>{setColor(colorScheme)});
-  })
-    return (
-        <View style={{flexDirection: "row",
-        height: Sizing(54),
-        backgroundColor: color === 'dark' ? COLORS.darkgrey : COLORS.light,
-        shadowColor: "#000000",
-
-        shadowOpacity: 0.21,
-        shadowRadius: 11,
-        elevation: 9,
-        shadowOffset: {
-            width: 0,
-            height: -3,
-        },
-        shadowOpacity: .15}} >
-            {
-                TAB_BAR_ITEMS.map((item, index) => {
-                    return (
-                        <TouchableOpacity
-                            key={index}
-                            style={styles.tabBarItem}
-                            onPress={() => {
-                                navigation.navigate(item.route)
-                                setSelectedTabIndex(index)}}>
-                            <Image
-                                source={item.icon}
-                                style={[styles.tabIcon, {tintColor: color === 'dark' ? COLORS.light : COLORS.dark}, index == selectedTabIndex && { tintColor: COLORS.primary }]}
-                                resizeMode="contain" />
-                        </TouchableOpacity>
-                    )
-                })
+    useEffect(() => {
+        Appearance.addChangeListener(({ colorScheme }) => { setColor(colorScheme) });
+    })
+    useEffect(() => {
+        let keyboardEventListeners;
+        if (Platform.OS === 'android') {
+            keyboardEventListeners = [
+                Keyboard.addListener('keyboardDidShow', () => setVisible(false)),
+                Keyboard.addListener('keyboardDidHide', () => setVisible(true)),
+            ];
+        }
+        return () => {
+            if (Platform.OS === 'android') {
+                keyboardEventListeners &&
+                    keyboardEventListeners.forEach(eventListener => eventListener.remove());
             }
-        </View>
-    )
+        };
+    }, []);
+    const render = () => {
+        if (Platform.OS === 'ios') {
+            return (
+                <View style={{
+                    flexDirection: "row",
+                    height: Sizing(54),
+                    backgroundColor: color === 'dark' ? COLORS.darkgrey : COLORS.light,
+                    shadowColor: "#000000",
+                    shadowOpacity: 0.21,
+                    shadowRadius: 11,
+                    elevation: 9,
+                    shadowOffset: {
+                        width: 0,
+                        height: -3,
+                    },
+                    shadowOpacity: .15
+                }} >
+                    {
+                        TAB_BAR_ITEMS.map((item, index) => {
+                            return (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={styles.tabBarItem}
+                                    onPress={() => {
+                                        navigation.navigate(item.route)
+                                        setSelectedTabIndex(index)
+                                    }}>
+                                    <Image
+                                        source={item.icon}
+                                        style={[styles.tabIcon, { tintColor: color === 'dark' ? COLORS.light : COLORS.dark }, index == selectedTabIndex && { tintColor: COLORS.primary }]}
+                                        resizeMode="contain" />
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </View>
+            )
+        }
+        if (!visible) return null;
+        return (
+            <View style={{
+                flexDirection: "row",
+                height: Sizing(54),
+                backgroundColor: color === 'dark' ? COLORS.darkgrey : COLORS.light,
+                shadowColor: "#000000",
+                shadowOpacity: 0.21,
+                shadowRadius: 11,
+                elevation: 9,
+                shadowOffset: {
+                    width: 0,
+                    height: -3,
+                },
+                shadowOpacity: .15
+            }} >
+                {
+                    TAB_BAR_ITEMS.map((item, index) => {
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.tabBarItem}
+                                onPress={() => {
+                                    navigation.navigate(item.route)
+                                    setSelectedTabIndex(index)
+                                }}>
+                                <Image
+                                    source={item.icon}
+                                    style={[styles.tabIcon, { tintColor: color === 'dark' ? COLORS.light : COLORS.dark }, index == selectedTabIndex && { tintColor: COLORS.primary }]}
+                                    resizeMode="contain" />
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+            </View>
+        )
+    }
+    return render();
 }
 
 const styles = StyleSheet.create({

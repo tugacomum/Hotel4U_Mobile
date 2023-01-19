@@ -35,8 +35,7 @@ export function AuthProvider({ children }) {
         const token = await AsyncStorage.getItem('@hotel4u:token');
         if (token) {
             api.defaults.headers['authorization'] = `${token}`;
-            const user = await api.get('getprofile').then(r => r.data);
-            setUser(user);
+            await api.get('getprofile').then(r => {r.data; setUser(r.data.user)});
         }
     }
 
@@ -119,14 +118,17 @@ export function AuthProvider({ children }) {
     }
 
     async function editUser({ email, username, birthDate, phone_number, adress, navigation }) {
-        await api.patch('user', {
-            adress, username, birthDate, email, phone_number
-        }).then(r => {
-            r.data; showMessage({
+        phone_number = parseInt(phone_number);
+        const _id = user._id
+        await api.patch('user', { 
+            _id, adress, username, birthDate, email, phone_number
+        }).then(r => { r.data; setUser({...user, email, username, birthDate, phone_number, adress});
+             showMessage({
                 type: "success",
                 message: "Profile edited successfully",
                 duration: 2000
-            }); navigation.navigate('ProfileScreen')
+            }) 
+            navigation.navigate('Profile')
         }).catch(err => {
             console.log(err); showMessage({
                 type: "danger",

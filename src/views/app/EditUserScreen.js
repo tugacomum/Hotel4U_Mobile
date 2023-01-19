@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ import Animated from 'react-native-reanimated';
 import COLORS from '../../consts/colors';
 
 const EditProfileScreen = ({ navigation }) => {
+  
   const hideDatePicker = () => {
     setDateTimePickerVisibility(false);
   };
@@ -41,10 +42,10 @@ const EditProfileScreen = ({ navigation }) => {
   const today = new Date();
   const { user, editUser } = useAuth();
   const [birthDate, setBirthDate] = useState(today);
-  const [username, setUsername] = useState("");
-  const [adress, setAdress] = useState("");
-  const [phone_number, setPhone_Number] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(user.username);
+  const [adress, setAdress] = useState(user.adress);
+  const [phone_number, setPhone_Number] = useState(Number(user.phone_number).toString());
+  const [email, setEmail] = useState(user.email);
   const [image, setImage] = useState('https://www.tv7dias.pt/wp-content/uploads/2018/04/idartigo_10527_tm920x656pxs.jpg');
 
   function renderInner() {
@@ -69,22 +70,11 @@ const EditProfileScreen = ({ navigation }) => {
     )
   };
 
-  function renderHeader() {
-    return (
-      <View style={styles.header}>
-        <View style={styles.panelHeader}>
-          <View style={styles.panelHandle} />
-        </View>
-      </View>
-    )
-  };
-
   let bs = React.createRef();
   let fall = new Animated.Value(1);
 
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
-
 
 
   const pickCameraImage = async () => {
@@ -130,7 +120,6 @@ const EditProfileScreen = ({ navigation }) => {
   }, [image])
 
   async function editProfile() {
-    //validações do formulário e melhorar o estilo
     editUser({
       email, username, birthDate, phone_number: Number(phone_number), adress, navigation: navigation
     })
@@ -148,9 +137,8 @@ const EditProfileScreen = ({ navigation }) => {
       />
       <BottomSheet
         ref={bs}
-        snapPoints={[350, 0]}
+        snapPoints={[300, 0]}
         renderContent={renderInner}
-        renderHeader={renderHeader}
         initialSnap={1}
         callbackNode={fall}
         enabledGestureInteraction={true}
@@ -204,26 +192,30 @@ const EditProfileScreen = ({ navigation }) => {
 
         <View style={{ paddingRight: 40, paddingLeft: 40 }}>
           <View style={{ marginTop: 10 }}>
-            <Item floatingLabel style={{ borderColor: '#A1A1A1', width: Dimensions.get('window').width / 1.6, alignSelf: 'center', left: 5 }}>
+            <Item floatingLabel style={{ borderColor: '#A1A1A1', width: Dimensions.get('window').width / 1.2, alignSelf: 'center', left: 5 }}>
               <Label style={{ top: -8, left: 5, color: '#383838', fontStyle: 'normal', fontSize: 15 }}>Username</Label>
               <Input enablesReturnKeyAutomatically value={username} onChangeText={(text) => setUsername(text)} autoCapitalize='none' autoComplete='off' keyboardType='default' style={{ paddingLeft: 5 }} />
             </Item>
-            <Item floatingLabel style={{ borderColor: '#A1A1A1', marginTop: 10, width: Dimensions.get('window').width / 1.6, alignSelf: 'center', left: 5 }}>
+            <Item floatingLabel style={{ borderColor: '#A1A1A1', marginTop: 30, width: Dimensions.get('window').width / 1.2, alignSelf: 'center', left: 5 }}>
               <Label style={{ top: -8, color: '#383838', fontStyle: 'normal', fontSize: 15, left: 4 }}>Email</Label>
               <Input enablesReturnKeyAutomatically value={email} onChangeText={(text) => setEmail(text)} autoCa autoCapitalize='none' autoComplete='off' />
             </Item>
-            <Item floatingLabel style={{ borderColor: '#A1A1A1', marginTop: 10, width: Dimensions.get('window').width / 1.6, alignSelf: 'center', left: 5 }}>
+            <Item floatingLabel style={{ borderColor: '#A1A1A1', marginTop: 30, width: Dimensions.get('window').width / 1.2, alignSelf: 'center', left: 5 }}>
               <Label style={{ top: -8, color: '#383838', fontStyle: 'normal', fontSize: 15, left: 4 }}>Adress</Label>
               <Input enablesReturnKeyAutomatically value={adress} onChangeText={(text) => setAdress(text)} autoCa autoCapitalize='none' autoComplete='off' />
             </Item>
-            <Item floatingLabel style={{ borderColor: '#A1A1A1', marginTop: 10, width: Dimensions.get('window').width / 1.6, alignSelf: 'center', left: 5 }}>
+            <Item floatingLabel style={{ borderColor: '#A1A1A1', marginTop: 30, width: Dimensions.get('window').width / 1.2, alignSelf: 'center', left: 5 }}>
               <Label style={{ top: -8, color: '#383838', fontStyle: 'normal', fontSize: 15, left: 4 }}>Phone Number</Label>
               <Input enablesReturnKeyAutomatically value={phone_number} onChangeText={(text) => setPhone_Number(text)} autoCa autoCapitalize='none' autoComplete='off' />
             </Item>
-            <View
+          </View>
+        </View>
+        <View
               style={{
+                paddingRight: 40,
+                paddingLeft: 23,
                 flexDirection: "row",
-                marginTop: 10,
+                marginTop: 30,
                 alignItems: "center"
               }}
             >
@@ -251,8 +243,6 @@ const EditProfileScreen = ({ navigation }) => {
 
               </TouchableOpacity>
             </View>
-          </View>
-        </View>
         <TouchableOpacity style={styles.commandButton} onPress={editProfile}>
           <Text style={styles.panelButtonTitle}>Submit</Text>
         </TouchableOpacity>
@@ -273,7 +263,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: COLORS.primary,
     alignItems: 'center',
-    marginTop: 10
+    marginTop: 40
   },
   dob: {
     fontSize: 14,
