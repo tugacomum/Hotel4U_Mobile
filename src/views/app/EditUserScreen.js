@@ -8,8 +8,7 @@ import {
   Image
 } from 'react-native';
 
-import FlashMessage, { showMessage } from 'react-native-flash-message';
-
+import FlashMessage from 'react-native-flash-message';
 import moment from "moment";
 
 import { calendarIcon } from "../../assets"
@@ -25,9 +24,10 @@ import { useAuth } from '../../contexts/auth';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import COLORS from '../../consts/colors';
+import { api } from '../../services/api';
 
 const EditProfileScreen = ({ navigation }) => {
-  
+
   const hideDatePicker = () => {
     setDateTimePickerVisibility(false);
   };
@@ -46,7 +46,7 @@ const EditProfileScreen = ({ navigation }) => {
   const [adress, setAdress] = useState(user.adress);
   const [phone_number, setPhone_Number] = useState(Number(user.phone_number).toString());
   const [email, setEmail] = useState(user.email);
-  const [image, setImage] = useState('https://www.tv7dias.pt/wp-content/uploads/2018/04/idartigo_10527_tm920x656pxs.jpg');
+  const [image, setImage] = useState();
 
   function renderInner() {
     return (
@@ -76,14 +76,14 @@ const EditProfileScreen = ({ navigation }) => {
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
 
-
   const pickCameraImage = async () => {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       allowsMultipleSelection: false,
       aspect: [4, 3],
-      quality: 1
+      quality: 1,
+      selectionLimit: 1
     })
     if (!result.cancelled) {
       setImage(result.uri);
@@ -101,10 +101,29 @@ const EditProfileScreen = ({ navigation }) => {
       allowsEditing: true,
       allowsMultipleSelection: false,
       aspect: [4, 3],
-      quality: 1
+      quality: 1,
+      selectionLimit: 1
     })
-    if (!result.cancelled) {
-      setImage(result.uri)
+    if (!result.canceled) {
+      setImage(result.assets)
+      const formdata = new FormData();
+      const filename = result.assets[0].uri.split('/').pop()
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : 'image';
+
+      formdata.append('name', filename);
+      formdata.append('imageTest', {
+        uri: image[0].uri,
+        type,
+        name: filename
+      });
+
+      let res = await api.post('upload', {
+        body: formdata,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+      })
     }
     if (hasGalleryPermission === false) {
       return <Text>No acess to Internal Storage</Text>
@@ -157,9 +176,6 @@ const EditProfileScreen = ({ navigation }) => {
               alignItems: 'center',
             }}>
             <ImageBackground
-              source={{
-                uri: image,
-              }}
               style={{ height: 100, width: 100 }}
               imageStyle={{ borderRadius: 50 }}>
               <View
@@ -189,7 +205,6 @@ const EditProfileScreen = ({ navigation }) => {
             {user.username}
           </Text>
         </View>
-
         <View style={{ paddingRight: 40, paddingLeft: 40 }}>
           <View style={{ marginTop: 10 }}>
             <Item floatingLabel style={{ borderColor: '#A1A1A1', width: Dimensions.get('window').width / 1.2, alignSelf: 'center', left: 5 }}>
@@ -211,38 +226,36 @@ const EditProfileScreen = ({ navigation }) => {
           </View>
         </View>
         <View
-              style={{
-                paddingRight: 40,
-                paddingLeft: 23,
-                flexDirection: "row",
-                marginTop: 30,
-                alignItems: "center"
-              }}
-            >
+          style={{
+            paddingRight: 40,
+            paddingLeft: 23,
+            flexDirection: "row",
+            marginTop: 30,
+            alignItems: "center"
+          }}
+        >
+          <Text style={styles.dob} >{"Date of birth:"}</Text>
+          <TouchableOpacity
+            style={styles.dobSelector}
+            onPress={() => {
+              setDateTimePickerVisibility(true)
+            }}
+          >
+            <Text style={styles.dob} >
+              {birthDate ?
+                moment(birthDate).format("MM-DD-YYYY")
+                :
+                "Choose Date of birth"
+              }
+            </Text>
 
-              <Text style={styles.dob} >{"Date of birth:"}</Text>
-              <TouchableOpacity
-                style={styles.dobSelector}
-                onPress={() => {
-                  setDateTimePickerVisibility(true)
-                }}
-              >
+            <Image
+              source={calendarIcon}
+              style={styles.calendarIcon}
+            />
 
-                <Text style={styles.dob} >
-                  {birthDate ?
-                    moment(birthDate).format("MM-DD-YYYY")
-                    :
-                    "Choose Date of birth"
-                  }
-                </Text>
-
-                <Image
-                  source={calendarIcon}
-                  style={styles.calendarIcon}
-                />
-
-              </TouchableOpacity>
-            </View>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity style={styles.commandButton} onPress={editProfile}>
           <Text style={styles.panelButtonTitle}>Submit</Text>
         </TouchableOpacity>
@@ -315,7 +328,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#00000040',
     marginBottom: 10,
-  },
+  }, 
   panelTitle: {
     fontSize: 27,
     height: 35,

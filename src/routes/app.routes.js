@@ -10,7 +10,12 @@ import Details from '../views/app/DetailsScreen';
 import User from '../views/app/UserScreen';
 import Favourite from '../views/app/FavouriteScreen'
 import EditUser from '../views/app/EditUserScreen'
+import BookingScreen from '../views/app/BookingScreen';
 import MapsScreen from '../views/app/MapsScreen';
+import PaymentScreen from '../views/app/PaymentScreen';
+import ReservationsScreen from '../views/app/ReservationsScreen';
+import SupportScreen from '../views/app/SupportScreen';
+import SettingsScreen from '../views/app/SettingsScreen';
 import COLORS from '../consts/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -36,7 +41,6 @@ export default function AppRoutes() {
           ),
         }} />
         <Tab.Screen name="FavouriteScreen" component={Favourite} />
-        <Tab.Screen name="DetailsScreen" component={Details} />
       </Tab.Navigator>
     </>
   )
@@ -60,6 +64,18 @@ const ProfileStackScreen = ({ navigation }) => {
       <ProfileStack.Screen name="EditProfileScreen" options={{
         headerTitle: 'Edit your profile'
       }} component={EditUser} />
+      <ProfileStack.Screen name="SettingsScreen" options={{
+        headerTitle: 'Settings'
+      }} component={SettingsScreen} />
+      <ProfileStack.Screen name="SupportScreen" options={{
+        headerTitle: 'Support'
+      }} component={SupportScreen} />
+      <ProfileStack.Screen name="PaymentScreen" options={{
+        headerTitle: 'Payment'
+      }} component={PaymentScreen} />
+      <ProfileStack.Screen name="ReservationsScreen" options={{
+        headerTitle: 'Your reservations'
+      }} component={ReservationsScreen} />
     </ProfileStack.Navigator>
   )
 }
@@ -95,6 +111,18 @@ const HomeStackScreen = ({ navigation }) => {
               Hotel's <Text
                 style={{ fontSize: 25, fontWeight: 'bold', color: COLORS.dark }}>
                 details
+              </Text>
+            </Text>
+          </View>
+        </View>
+      )}}/>
+      <HomeStack.Screen name="BookingScreen" component={BookingScreen} options={{headerTitle: () => (
+        <View>
+          <View>
+            <Text style={{ fontSize: 25, fontWeight: 'bold', color: COLORS.dark }}>
+              Book your <Text
+                style={{ fontSize: 25, fontWeight: 'bold', color: COLORS.primary }}>
+                hotel
               </Text>
             </Text>
           </View>

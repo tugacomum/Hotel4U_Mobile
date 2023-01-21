@@ -42,9 +42,9 @@ const HotelCard = ({ data }) => {
 
         <CircleButton imgUrl={assets.heart} right={10} top={10} />
       </View>
-
+      
       <SubInfo item={data}/>
-
+    
       <View style={{ width: "100%", padding: SIZES.font }}>
         <NFTTitle
           rating_avg={data.rating_avg}

@@ -15,6 +15,7 @@ import {
   Animated,
   LogBox
 } from 'react-native';
+import { Rating } from 'react-native-stock-star-rating';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../../consts/colors';
 import { Appearance } from 'react-native';
@@ -124,11 +125,8 @@ const HomeScreen = ({ navigation }) => {
                 marginTop: 10,
               }}>
               <View style={{ flexDirection: 'row' }}>
-                <Icon name="star" size={15} color={COLORS.orange} />
-                <Icon name="star" size={15} color={COLORS.orange} />
-                <Icon name="star" size={15} color={COLORS.orange} />
-                <Icon name="star" size={15} color={COLORS.orange} />
-                <Icon name="star" size={15} color={COLORS.grey} />
+              <View style={{ bottom: 4 }}>
+              <Rating color={COLORS.orange} stars={hotel.rating_avg} maxStars={5} size={15} /></View>
               </View>
               <Text style={{ fontSize: 10, color: COLORS.grey }}>{hotel.count_reviews} reviews</Text>
             </View>
@@ -151,7 +149,7 @@ const HomeScreen = ({ navigation }) => {
               zIndex: 1,
               flexDirection: 'row',
             }}>
-            <Icon name="star" size={15} color={COLORS.orange} style={{marginTop: 3}}/>
+            <Icon name="star" size={15} color={COLORS.orange} style={{marginTop: 4}}/>
             <Text style={{ color: COLORS.white, fontWeight: 'bold', fontSize: 15 }}>
               {hotel.rating_avg}
             </Text>

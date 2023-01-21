@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Image, Text } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { View, Text } from "react-native";
+import { Rating } from 'react-native-stock-star-rating';
 import COLORS from "../consts/colors";
 import { SIZES, FONTS, SHADOWS } from "../consts";
 
-export const NFTTitle = ({ title, subTitle, titleSize, subTitleSize }) => {
+export const NFTTitle = ({ title, subTitle, titleSize, subTitleSize, rating_avg }) => {
   return (
     <View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -23,18 +23,13 @@ export const NFTTitle = ({ title, subTitle, titleSize, subTitleSize }) => {
             fontSize: titleSize,
             color: COLORS.dark,
             marginTop: 5
-          }}
-        > 
-            <Icon name="star" size={15} color={COLORS.orange} />
-            <Icon name="star" size={15} color={COLORS.orange} />
-            <Icon name="star" size={15} color={COLORS.orange} />
-            <Icon name="star" size={15} color={COLORS.orange} />
-            <Icon name="star" size={15} color={COLORS.grey} />
+          }}>
         </Text>
+        <View style={{top: 1}}>
+        <Rating color={COLORS.orange} stars={rating_avg} maxStars={5} size={15} /></View>
       </View>
       <Text
         style={{
-          fontFamily: FONTS.regular,
           fontSize: subTitleSize,
           color: COLORS.grey,
           marginTop: 20
@@ -46,7 +41,7 @@ export const NFTTitle = ({ title, subTitle, titleSize, subTitleSize }) => {
   );
 };
 
-export const EndDate = ({item}) => {
+export const EndDate = ({ item }) => {
   return (
     <View
       style={{
@@ -85,7 +80,7 @@ export const SubInfo = ({ item }) => {
         justifyContent: "space-between",
       }}
     >
-      <EndDate item={item}/>
+      <EndDate item={item} />
     </View>
   );
 };

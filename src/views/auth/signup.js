@@ -42,9 +42,7 @@ const HotelTextInput = ({
 }) => {
 
     const [isFocused, setFocused] = useState(false);
-
     return (
-
         <Item
             floatingLabel
             style={{
@@ -69,7 +67,6 @@ const HotelTextInput = ({
                 placeholder={`${placeholder}${required ? " *" : ""}`}
                 value={value}
                 onChangeText={onChangeText}
-
                 style={{
                     color: COLOR_HOTEL_RED,
                 }}
@@ -118,10 +115,7 @@ const HotelPicker = ({
     )
 }
 
-
-
 const today = new Date();
-
 
 const SignUp = ({ navigation }) => {
     const { register } = useAuth();

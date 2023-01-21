@@ -10,31 +10,32 @@ import {
 import COLORS from '../../consts/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Appearance } from 'react-native';
+import { Rating } from 'react-native-stock-star-rating';
 
-const DetailsScreen = ({navigation, route}) => {
+const DetailsScreen = ({ navigation, route }) => {
   const item = route.params.hotel;
   const [color, setColor] = useState('light');
-    useEffect(() => {
-      console.log(item)
-        Appearance.addChangeListener(({ colorScheme }) => { setColor(colorScheme) });
-    })
+  useEffect(() => {
+    console.log(item)
+    Appearance.addChangeListener(({ colorScheme }) => { setColor(colorScheme) });
+  })
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         backgroundColor: color === 'dark' ? COLORS.darkgrey : COLORS.light,
-        flex:1
+        flex: 1
       }}>
-      
-      <ImageBackground style={style.headerImage} source={{uri: item.image}}>
-        
+
+      <ImageBackground style={style.headerImage} source={{ uri: item.image }}>
+
       </ImageBackground>
       <View>
-        <TouchableOpacity style={style.iconContainer} onPress={()=> navigation.navigate("MapsScreen")}>
+        <TouchableOpacity style={style.iconContainer} onPress={() => navigation.navigate("MapsScreen")}>
           <Icon name="place" color={COLORS.white} size={28} />
         </TouchableOpacity>
-        <View style={{marginTop: 20, paddingHorizontal: 20}}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: color === 'dark' ? COLORS.white : COLORS.dark}}>{item.name}</Text>
+        <View style={{ marginTop: 20, paddingHorizontal: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: color === 'dark' ? COLORS.white : COLORS.dark }}>{item.name}</Text>
           <Text
             style={{
               fontSize: 12,
@@ -51,22 +52,19 @@ const DetailsScreen = ({navigation, route}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flexDirection: 'row'}}>
-                <Icon name="star" size={20} color={COLORS.orange} />
-                <Icon name="star" size={20} color={COLORS.orange} />
-                <Icon name="star" size={20} color={COLORS.orange} />
-                <Icon name="star" size={20} color={COLORS.orange} />
-                <Icon name="star" size={20} color={COLORS.grey} />
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row' }}>
+              <View style={{ bottom: 6 }}>
+              <Rating color={COLORS.orange} stars={item.rating_avg} maxStars={5} size={20} /></View>
               </View>
-              <Text style={{bottom:4, fontWeight: 'bold', fontSize: 18, marginLeft: 5, color: color === 'dark' ? COLORS.white : COLORS.dark}}>
+              <Text style={{ bottom: 4, fontWeight: 'bold', fontSize: 18, marginLeft: 5, color: color === 'dark' ? COLORS.white : COLORS.dark }}>
                 {item.rating_avg}
               </Text>
             </View>
-            <Text style={{fontSize: 13, color: COLORS.grey, bottom:1}}>{item.count_reviews} reviews</Text>
+            <Text style={{ fontSize: 13, color: COLORS.grey, bottom: 1 }}>{item.count_reviews} reviews</Text>
           </View>
-          <View style={{marginTop: 20}}>
-            <Text style={{lineHeight: 20, color: COLORS.grey}}>
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ lineHeight: 20, color: COLORS.grey }}>
               {item.description}
             </Text>
           </View>
@@ -79,7 +77,7 @@ const DetailsScreen = ({navigation, route}) => {
             paddingLeft: 20,
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: color === 'dark' ? COLORS.white : COLORS.dark}}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: color === 'dark' ? COLORS.white : COLORS.dark }}>
             Price per night
           </Text>
           <View style={style.priceTag}>
@@ -103,11 +101,11 @@ const DetailsScreen = ({navigation, route}) => {
             </Text>
           </View>
         </View>
-        <View style={style.btn}>
-          <Text style={{color: COLORS.white, fontSize: 18, fontWeight: 'bold'}}>
+        <TouchableOpacity onPress={()=>navigation.navigate('BookingScreen')} style={style.btn}>
+          <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
             Book Now
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -121,7 +119,7 @@ const style = StyleSheet.create({
     marginTop: 40,
     backgroundColor: COLORS.primary,
     marginHorizontal: 20,
-    borderRadius: 10,
+    borderRadius: 30,
   },
 
   priceTag: {

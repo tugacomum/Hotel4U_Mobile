@@ -16,7 +16,7 @@ import {
 import Moment from 'moment/moment';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function User() {
+export default function User({ navigation }) {
     const [isLoadingDone, setLoadingDone] = useState(false);
     const [data, setData] = useState([]);
     const { user, logout } = useAuth();
@@ -87,25 +87,25 @@ export default function User() {
           </View>
       </View>
       <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={() => navigation.navigate('ReservationsScreen')}>
           <View style={styles.menuItem}>
             <Icon name="heart-outline" color={COLORS.primary} size={25}/>
-            <Text style={styles.menuItemText}>Favorites</Text>
+            <Text style={styles.menuItemText}>Reservations</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={() => navigation.navigate('PaymentScreen')}>
           <View style={styles.menuItem}>
             <Icon name="credit-card" color={COLORS.primary} size={25}/>
             <Text style={styles.menuItemText}>Payment</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={() => navigation.navigate('SupportScreen')}>
           <View style={styles.menuItem}>
             <Icon name="account-check-outline" color={COLORS.primary} size={25}/>
             <Text style={styles.menuItemText}>Support</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={() => navigation.navigate('SettingsScreen')}>
           <View style={styles.menuItem}>
             <Icon name="account-cog-outline" color={COLORS.primary} size={25}/>
             <Text style={styles.menuItemText}>Settings</Text>
