@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
         const token = await AsyncStorage.getItem('@hotel4u:token');
         if (token) {
             api.defaults.headers['authorization'] = `${token}`;
-            await api.get('getprofile').then(r => {r.data; setUser(r.data.user)});
+            await api.get('getprofile').then(r => { r.data; setUser(r.data.user) });
         }
     }
 
@@ -120,14 +120,15 @@ export function AuthProvider({ children }) {
     async function editUser({ email, username, birthDate, phone_number, adress, navigation }) {
         phone_number = parseInt(phone_number);
         const _id = user._id
-        await api.patch('user', { 
+        await api.patch('user', {
             _id, adress, username, birthDate, email, phone_number
-        }).then(r => { r.data; setUser({...user, email, username, birthDate, phone_number, adress});
-             showMessage({
+        }).then(r => {
+            r.data; setUser({ ...user, email, username, birthDate, phone_number, adress });
+            showMessage({
                 type: "success",
                 message: "Profile edited successfully",
                 duration: 2000
-            }) 
+            })
             navigation.navigate('Profile')
         }).catch(err => {
             console.log(err); showMessage({
@@ -138,8 +139,35 @@ export function AuthProvider({ children }) {
         })
     }
 
+    async function createReservation({ dayIn, dayOut, state, count_people, _idHotel, _idUser, navigation }) {
+        const services = state;
+        await api.post('reservation', {
+            _idUser, _idHotel, dayIn, dayOut, services, count_people
+        }).then(r => {
+            r.data; showMessage({
+                type: "success",
+                message: "Booking successfully done",
+                duration: 2000
+            });
+            if (AsyncStorage.getItem('@hotel4u:credit_card') != 1) {
+                navigation.navigate('CreditCardScreen')
+            } else {
+                navigation.navigate('PaymentScreen')
+            }
+            
+            
+        })
+            .catch(err => {
+                console.log(err); showMessage({
+                    type: "danger",
+                    message: "Something failed trying to create the reservation",
+                    duration: 2000
+                })
+            })
+    }
+
     return (
-        <AuthContext.Provider value={{ user, signIn, logout, setUser, register, verify, pass, recover, editUser }}>
+        <AuthContext.Provider value={{ user, signIn, logout, setUser, register, verify, pass, recover, editUser, createReservation }}>
             {children}
         </AuthContext.Provider>
     )

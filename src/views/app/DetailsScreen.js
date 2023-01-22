@@ -16,20 +16,15 @@ const DetailsScreen = ({ navigation, route }) => {
   const item = route.params.hotel;
   const [color, setColor] = useState('light');
   useEffect(() => {
-    console.log(item)
     Appearance.addChangeListener(({ colorScheme }) => { setColor(colorScheme) });
   })
   return (
     <ScrollView
-      showsVerticalScrollIndicator={false}
       contentContainerStyle={{
-        backgroundColor: color === 'dark' ? COLORS.darkgrey : COLORS.light,
-        flex: 1
+        backgroundColor: color === 'dark' ? COLORS.darkgrey : COLORS.light
       }}>
 
-      <ImageBackground style={style.headerImage} source={{ uri: item.image }}>
-
-      </ImageBackground>
+      <ImageBackground style={style.headerImage} source={{ uri: item.image }} />
       <View>
         <TouchableOpacity style={style.iconContainer} onPress={() => navigation.navigate("MapsScreen")}>
           <Icon name="place" color={COLORS.white} size={28} />
@@ -101,7 +96,7 @@ const DetailsScreen = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity onPress={()=>navigation.navigate('BookingScreen')} style={style.btn}>
+        <TouchableOpacity onPress={()=>navigation.navigate('BookingScreen', {item: item})} style={style.btn}>
           <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
             Book Now
           </Text>

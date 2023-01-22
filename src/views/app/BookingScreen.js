@@ -1,13 +1,30 @@
-import { View, Text, SafeAreaView, Dimensions, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, SafeAreaView, Keyboard, Dimensions, TouchableOpacity, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import COLORS from '../../consts/colors';
 import { Divider } from 'react-native-paper';
 import DateTimePicker from '../../components/DateTimePicker';
 import moment from "moment";
+import FlashMessage, { showMessage } from 'react-native-flash-message';
+import { useAuth } from '../../contexts/auth';
+
+const checked = require('../../assets/check.png')
 
 const today = new Date();
 
-const BookingScreen = () => {
+const BookingScreen = ({ route, navigation }) => {
+  useEffect(() => {
+    Keyboard.addListener("keyboardWillShow", keyboardWillShow);
+    Keyboard.addListener("keyboardWillHide", keyboardWillHide);
+    const shown = Keyboard.addListener("keyboardWillShow", keyboardWillShow);
+    const hide = Keyboard.addListener("keyboardWillHide", keyboardWillHide);
+
+    return () => {
+      shown.remove();
+      hide.remove();
+    };
+  }, [])
+  const { createReservation, user } = useAuth();
+  const item = route.params.item;
   const [dateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
   const [dateTimePickerVisible2, setDateTimePickerVisibility2] = useState(false);
   const [dayIn, setDayIn] = useState(today);
@@ -15,6 +32,15 @@ const BookingScreen = () => {
   const [state, setState] = useState(false);
   const [kids, setKids] = useState(0);
   const [adults, setAdults] = useState(0);
+
+  const keyboardWillShow = event => {
+    const newSize = event.endCoordinates.height - 30;
+    setMargin(newSize);
+  };
+
+  const keyboardWillHide = () => {
+    setMargin(0);
+  };
 
   const hideDatePicker = () => {
     setDateTimePickerVisibility(false);
@@ -35,8 +61,28 @@ const BookingScreen = () => {
   };
 
   function callFunction() {
-    //dayIn < dayOut, mostrar erro. verificar que existe pelo menos 1 adulto. serviços (selecionados ?)
-    console.log(dayIn < dayOut) 
+    if (dayIn >= dayOut) {
+      showMessage({
+        type: "danger",
+        message: "Day of departure must be greater than the day of entry",
+      });
+      return
+    }
+    if (adults == 0) {
+      showMessage({
+        type: "danger",
+        message: "There must be at least one adult"
+      })
+    }
+    const _idHotel = item._id;
+    const _idUser = user._id;
+
+    //verificar count_ppl pelo menos 1
+   
+    createReservation({
+      dayIn, dayOut, state, _idHotel, _idUser, navigation: navigation
+    })
+    //count_ppl
   }
 
   function getDayOfWeek(dayIn) {
@@ -62,6 +108,7 @@ const BookingScreen = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
+      <FlashMessage />
       <DateTimePicker
         isDatePickerVisible={dateTimePickerVisible}
         setDatePickerVisibility={setDateTimePickerVisibility}
@@ -92,7 +139,7 @@ const BookingScreen = () => {
           </TouchableOpacity>
           <View style={{
             height: '100%',
-            width: '0.1%',
+            width: 1,
             backgroundColor: '#909090'
           }} />
           <TouchableOpacity onPress={() => {
@@ -108,7 +155,7 @@ const BookingScreen = () => {
           </TouchableOpacity>
           <View style={{
             height: '100%',
-            width: '0.1%',
+            width: 1,
             backgroundColor: '#909090'
           }} />
           <View style={{ flex: 1, justifyContent: 'center', bottom: 7 }}>
@@ -169,41 +216,36 @@ const BookingScreen = () => {
       <Divider style={{ width: Dimensions.get('screen').width / 1.1, alignSelf: 'center', marginTop: 10 }} />
       <View style={{ padding: 15, marginLeft: 10, marginRight: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Hotel Services</Text>
-          <Text style={{ marginLeft: 5 }}>(tap to select services)</Text>
+          <Text style={{ marginLeft: 5, fontWeight: 'bold', marginTop: 1, fontSize: 22 }}>Hotel Services</Text>
+          <Text style={{ marginLeft: 5, fontWeight: '500', marginTop: 2 }}>(tap to select services)</Text>
         </View>
-        <TouchableOpacity onPress={() => setState(!state)}>
-          <View style={{ flexDirection: 'row', marginTop: 15, height: 120, backgroundColor: '#ededed', borderRadius: 10, borderColor: state == true ? COLORS.primary : null, borderWidth: state == true ? 4 : null }}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: state == true ? 31 : 35 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 22 }}>·</Text>
-                <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>Laundry</Text>
+        {state == true ? (
+          <TouchableOpacity onPress={() => setState(!state)}>
+            <View style={{ flexDirection: 'row', marginTop: 15, height: 120, backgroundColor: COLORS.primary, borderRadius: 10, borderColor: state == true ? COLORS.primary : null, borderWidth: state == true ? 4 : null, alignItems: 'center', justifyContent: 'center' }}>
+              <Image style={{ width: 50, height: 50 }} source={checked} />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => setState(!state)}>
+            <View style={{ marginTop: 15, height: 120, backgroundColor: '#ededed', borderRadius: 10, borderColor: state == true ? COLORS.primary : null, borderWidth: state == true ? 4 : null }}>
+              <View style={{ flex: 1, height: 120, justifyContent: 'center' }}>
+                <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
+                  <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 5 }}>· Laundry</Text>
+                  <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 5 }}>· Pub</Text>
+                  <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 5 }}>· WiFi Acess</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
+                  <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 5 }}>· Breakfast</Text>
+                  <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 5 }}>· Cofee & Tea</Text>
+                  <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 5 }}>· 24h Recept</Text>
+                </View>
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 22 }}>·</Text>
-                <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>Pub</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 22 }}>·</Text>
-                <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>WiFi Acess</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.primary, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, borderTopLeftRadius: 0, borderTopRightRadius: 100 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 17, color: COLORS.white }}>Extra payment of {item.services_price}€</Text>
               </View>
             </View>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginRight: state == true ? 31 : 35 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 22 }}>·</Text>
-                <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>Breakfast</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 22 }}>·</Text>
-                <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>Cofee & Tea</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 22 }}>·</Text>
-                <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>24h reception</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
       </View>
       <TouchableOpacity onPress={callFunction} style={{
         padding: 15,

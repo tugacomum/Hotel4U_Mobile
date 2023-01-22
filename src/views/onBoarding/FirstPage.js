@@ -6,11 +6,9 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function FirstPage({ navigation }) {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <View style={{ flex: 1 }}>
         <ImageBackground source={require('../../assets/group1.png')} style={{ width: '100%', height: '100%' }} />
-
-
         <View
           style={{
             flex: 1,

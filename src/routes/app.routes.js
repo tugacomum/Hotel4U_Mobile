@@ -12,12 +12,13 @@ import Favourite from '../views/app/FavouriteScreen'
 import EditUser from '../views/app/EditUserScreen'
 import BookingScreen from '../views/app/BookingScreen';
 import MapsScreen from '../views/app/MapsScreen';
-import PaymentScreen from '../views/app/PaymentScreen';
+import CreditCardScreen from '../views/app/CreditCardScreen';
 import ReservationsScreen from '../views/app/ReservationsScreen';
 import SupportScreen from '../views/app/SupportScreen';
 import SettingsScreen from '../views/app/SettingsScreen';
 import COLORS from '../consts/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import PaymentScreen from '../views/app/PaymentScreen';
 
 import HotelTabBar from './HotelTabBar';
 import HotelsScreen from '../views/app/HotelsScreen';
@@ -70,9 +71,9 @@ const ProfileStackScreen = ({ navigation }) => {
       <ProfileStack.Screen name="SupportScreen" options={{
         headerTitle: 'Support'
       }} component={SupportScreen} />
-      <ProfileStack.Screen name="PaymentScreen" options={{
-        headerTitle: 'Payment'
-      }} component={PaymentScreen} />
+      <ProfileStack.Screen name="CreditCardScreen" options={{
+        headerTitle: 'Credit Card'
+      }} component={CreditCardScreen} />
       <ProfileStack.Screen name="ReservationsScreen" options={{
         headerTitle: 'Your reservations'
       }} component={ReservationsScreen} />
@@ -81,7 +82,13 @@ const ProfileStackScreen = ({ navigation }) => {
 }
 const HomeStackScreen = ({ navigation }) => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator initialRouteName='PaymentScreen'>
+      <HomeStack.Screen name="CreditCardScreen" options={{
+        headerTitle: 'Credit Card'
+      }} component={CreditCardScreen} />
+      <HomeStack.Screen name="PaymentScreen" options={{
+        headerTitle: 'Payment'
+      }} component={PaymentScreen} />
       <HomeStack.Screen name="Home" component={Home} options={{headerShown: false}}/>
       <HomeStack.Screen name="MapsScreen" component={MapsScreen} options={{headerTitle: () => (
         <View>

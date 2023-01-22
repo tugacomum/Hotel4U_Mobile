@@ -11,7 +11,7 @@ export default function ThirdPage({ navigation }) {
     navigation.navigate('SignIn')
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <View style={{ flex: 1 }}>
         <ImageBackground source={require('../../assets/group3.png')} style={{ width: '100%', height: '100%' }} />
 
