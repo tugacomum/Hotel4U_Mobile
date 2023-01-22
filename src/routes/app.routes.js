@@ -116,18 +116,9 @@ const HomeStackScreen = ({ navigation }) => {
           </View>
         </View>
       )}}/>
-      <HomeStack.Screen name="BookingScreen" component={BookingScreen} options={{headerTitle: () => (
-        <View>
-          <View>
-            <Text style={{ fontSize: 25, fontWeight: 'bold', color: COLORS.dark }}>
-              Book your <Text
-                style={{ fontSize: 25, fontWeight: 'bold', color: COLORS.primary }}>
-                hotel
-              </Text>
-            </Text>
-          </View>
-        </View>
-      )}}/>
+      <HomeStack.Screen name="BookingScreen" component={BookingScreen} options={{
+        headerTitle: 'Booking'
+      }}/>
     </HomeStack.Navigator>
   )
 }

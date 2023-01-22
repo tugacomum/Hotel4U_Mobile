@@ -1,13 +1,30 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import * as React from 'react';
+import {
+    KeyboardAvoidingView,
+    StyleSheet,
+    Platform,
+    View,
+} from 'react-native';
+import CreditCard from 'react-native-credit-card-form-ui';
 
-
-const PaymentScreen = () => {
-  return (
-    <View>
-      <Text>PaymentScreen</Text>
-    </View>
-  )
+export default function PaymentScreen() {
+    const creditCardRef = React.useRef();
+    return (
+        <KeyboardAvoidingView style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={20}
+        >
+            <View style={{ marginTop: 60 }}>
+                <CreditCard ref={creditCardRef} />
+            </View>
+        </KeyboardAvoidingView>
+    );
 }
 
-export default PaymentScreen
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'white'
+    },
+});

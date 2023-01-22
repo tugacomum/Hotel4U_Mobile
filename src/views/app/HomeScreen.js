@@ -139,7 +139,7 @@ const HomeScreen = ({ navigation }) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        onPress={() => navigation.navigate('DetailsScreen', hotel)}>
+        onPress={() => navigation.navigate('DetailsScreen', {hotel: hotel})}>
         <View style={style.topHotelCard}>
           <View
             style={{

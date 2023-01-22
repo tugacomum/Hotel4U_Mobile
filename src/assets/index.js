@@ -9,5 +9,5 @@ export {
     tabHome, 
     tabFavourites,
     tabProfile,
-    backArrow, bellIcon, calendarIcon
+    backArrow, bellIcon, calendarIcon, 
 }

@@ -12,5 +12,5 @@ export {
     CircleButton,
     SubInfo,
     EndDate,
-    NFTTitle
+    NFTTitle,
 }
